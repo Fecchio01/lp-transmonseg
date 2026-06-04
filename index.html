@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transmonseg | Monitoramento e Segurança de Veículos</title>
+    <meta name="description" content="Acompanhamento de veículos e análise de riscos. Roteirização e segurança em tempo real. Assessoria para gerenciamento de frota.">
+    <style>
+        /* Modern Fluid Design Variables */
+        :root {
+            --brand-yellow: #FFC300;
+            --brand-yellow-light: #FFF8E1;
+            --brand-yellow-dark: #E6B000;
+            --bg-pure-white: #FFFFFF;
+            --bg-gray-50: #F9FAFB;
+            --text-dark: #111827;
+            --text-muted: #4B5563;
+            --text-light: #9CA3AF;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-pure-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; color: var(--text-dark); line-height: 1.2; }
+        .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        /* High-End Buttons */
+        .btn {
+            display: inline-block; padding: 18px 40px; background: var(--brand-yellow); color: var(--text-dark);
+            text-decoration: none; font-weight: 700; border-radius: 50px; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative; overflow: hidden;
+            border: none; cursor: pointer; text-align: center; font-family: inherit; font-size: 1.125rem;
+        }
+        .btn:hover, .hero .btn.active:hover { 
+            transform: translateY(-4px) !important; 
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15) !important; 
+            background: var(--brand-yellow);
+            filter: brightness(1.03);
+        }
+        .btn:active { transform: scale(0.97) !important; }
+
+        .btn-outline {
+            background: transparent; border: 2px solid var(--brand-yellow); color: var(--brand-yellow);
+            box-shadow: none;
+        }
+        .btn-outline:hover { 
+            background-color: var(--brand-yellow); 
+            color: var(--text-dark); 
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); 
+        }
+
+        /* High-End Card Hover Physics */
+        .card, .feature-card, .data-card, .cinematic-card, .large-feat-card, .comp-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card:hover, .feature-card:hover, .data-card:hover, .cinematic-card:hover, .large-feat-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 16px 40px rgba(255, 195, 0, 0.1);
+            border-color: rgba(255,195,0,0.4);
+            z-index: 10; position: relative;
+        }
+
+        /* High-End Scroll Animations (Clean Fade-Up) */
+        .section-header, .card, .feature-card, .data-card, .contact-card, .comp-card, .loc-grid > div, .hero h1, .hero p, .hero .btn, .large-feat-card, .cinematic-card, .cinematic-main-img {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .section-header.active, .card.active, .feature-card.active, .data-card.active, .contact-card.active, .comp-card.active, .loc-grid > div.active, .hero h1.active, .hero p.active, .hero .btn.active, .large-feat-card.active, .cinematic-card.active, .cinematic-main-img.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        nav {
+            padding: 12px 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); max-width: 1280px; z-index: 1000; 
+            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; }
+        .logo img { height: 115px; border-radius: 8px; object-fit: contain; transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: var(--text-dark); text-decoration: none; font-weight: 600; transition: var(--transition); }
+        .nav-links a:hover { color: var(--brand-yellow-dark); }
+
+        /* HERO */
+        .hero {
+            padding: 240px 0 160px;
+            min-height: 90vh;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            color: white; text-align: center; position: relative;
+            z-index: 1; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -5%; left: -5%; right: -5%; bottom: -5%;
+            background: linear-gradient(to right, rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.7)), url('../Transmomseg_ Monitoramento e Segurança de Veículos _ TransMomSeg_files/gestao-de-transporte-logistica-AVL18KNrqzHq7PEN.jpg') center/cover no-repeat;
+            filter: blur(6px);
+            z-index: -1;
+        }
+        @keyframes liquidGold {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero h1 { color: white; font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 24px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .hero h1.active { 
+            background: linear-gradient(45deg, #ffffff, #FFD000, #ffffff, #FBBF24);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: liquidGold 8s ease infinite; 
+        }
+        .hero p { font-size: 1.25rem; color: #E5E7EB; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        
+        /* Utilities */
+        .section-padding { padding: 120px 0; }
+        .bg-gray { background-color: #f9fafb; }
+        .bg-warm { background-color: #fcfaf3; } 
+        .bg-dark { background-color: #111827; color: white; }
+        .bg-dark h2, .bg-dark h3 { color: white; }
+        
+        .section-header { text-align: center; margin-bottom: 64px; }
+        .section-header h2 { font-size: clamp(2rem, 4vw, 2.75rem); margin-bottom: 16px; }
+        .section-header p { font-size: 1.125rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; }
+        .bg-dark .section-header p { color: var(--text-light); }
+        .module-tag { display: inline-block; padding: 6px 16px; background: var(--brand-yellow); color: var(--text-dark); border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.875rem; margin-bottom: 16px; }
+
+        /* Pain Grid */
+        .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+        .card { background: white; border-radius: var(--radius-md); padding: 40px; box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.05); }
+        .card h3 { margin-bottom: 12px; font-size: 1.5rem; }
+        .card p { color: var(--text-muted); font-size: 1.125rem; }
+
+        /* 2-Card Grid (Módulo 1 & 2) */
+        .two-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+        .large-feat-card { background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .large-feat-card img { width: 100%; display: block; height: auto; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .large-feat-card-content { padding: 40px; flex-grow: 1; }
+        .large-feat-card-content h3 { font-size: 1.75rem; margin-bottom: 16px; color: var(--text-dark); }
+        .large-feat-card-content p { color: var(--text-muted); font-size: 1.125rem; line-height: 1.6; }
+
+        /* MÓDULO 3: Cinematic Layout */
+        .cinematic-wrapper { text-align: center; }
+        .cinematic-main-img { width: 100%; max-width: 900px; height: auto; border-radius: var(--radius-lg); margin: 0 auto 40px auto; display: block; box-shadow: var(--shadow-xl); border: 1px solid rgba(255,255,255,0.1); }
+        .cinematic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: left; max-width: 1000px; margin: 0 auto; }
+        .cinematic-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: var(--radius-lg); }
+        .cinematic-card h3 { font-size: 1.5rem; margin-bottom: 16px; color: white; }
+        .cinematic-card p { color: var(--text-light); font-size: 1.125rem; line-height: 1.6; }
+
+        /* Data Grid (Concreto) */
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 800px; margin: 0 auto; }
+        .data-card { text-align: center; padding: 40px; background: var(--brand-yellow-light); border-radius: var(--radius-lg); border: 1px solid rgba(255,195,0,0.2); }
+        .data-card h3 { font-size: 4rem; color: var(--brand-yellow-dark); margin-bottom: 8px; }
+        .data-card p { font-size: 1.25rem; font-weight: 600; color: var(--text-dark); }
+
+        /* Comparison Grid */
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 1000px; margin: 0 auto; }
+        .comp-card { 
+            background: white; border-radius: var(--radius-lg); padding: 40px; 
+            box-shadow: var(--shadow-md); color: var(--text-dark); position: relative; overflow: hidden; 
+        }
+        .comp-card.negative { border-top: 6px solid #EF4444; }
+        .comp-card.negative:hover { 
+            transform: translateY(-6px) scale(1.01); 
+            box-shadow: 0 16px 40px rgba(239, 68, 68, 0.1); 
+            border-color: rgba(239, 68, 68, 0.4); z-index: 10; position: relative; 
+        }
+        .comp-card.positive { border-top: 6px solid #10B981; z-index: 2; box-shadow: var(--shadow-lg); }
+        .comp-card.positive:hover { 
+            transform: translateY(-6px) scale(1.01); 
+            box-shadow: 0 16px 40px rgba(16, 185, 129, 0.1); 
+            border-color: rgba(16, 185, 129, 0.4); z-index: 10; position: relative; 
+        }
+        
+        .comp-header { font-family: 'Montserrat', sans-serif; font-size: 1.75rem; font-weight: 800; margin-bottom: 32px; text-align: center; }
+        .comp-card.negative .comp-header { color: #EF4444; }
+        .comp-card.positive .comp-header { color: #10B981; }
+        .comp-card ul { list-style: none; }
+        .comp-card ul li { 
+            margin-bottom: 20px; padding-left: 36px; position: relative; font-size: 1.125rem; line-height: 1.5; 
+        }
+        .comp-card.negative ul li::before { content: '✗'; position: absolute; left: 0; color: #EF4444; font-weight: bold; font-size: 1.5rem; top: -2px; }
+        .comp-card.positive ul li::before { content: '✓'; position: absolute; left: 0; color: #10B981; font-weight: bold; font-size: 1.5rem; top: -2px; }
+
+        /* About Us Section */
+        .about-split { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto; }
+        .about-content { font-size: 1.125rem; color: var(--text-muted); }
+        .about-content p { margin-bottom: 20px; }
+
+        /* Location Strip */
+        .loc-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center; }
+        .map-container { width: 100%; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); height: 400px; }
+
+        /* Forms / Contact Split */
+        .contact-split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: start; max-width: 1100px; margin: 0 auto; }
+        .contact-info { background: white; padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.05); }
+        .form-container { background: white; padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); }
+        .form-control { width: 100%; padding: 12px 16px; border: 1px solid #D1D5DB; border-radius: 8px; font-family: 'Inter', sans-serif; transition: var(--transition); }
+        .form-control:focus { outline: none; border-color: var(--brand-yellow); box-shadow: 0 0 0 3px rgba(255, 195, 0, 0.2); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+
+        @media (max-width: 992px) {
+            .two-card-grid, .comparison-grid, .about-split, .loc-grid, .contact-split { grid-template-columns: 1fr; }
+            .cinematic-grid { grid-template-columns: 1fr; }
+            .comp-card.positive { transform: scale(1); }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+            .about-split { display: flex; flex-direction: column-reverse; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="logo-transparent.png" alt="Transmonseg Logo">
+            </a>
+            <div class="nav-links">
+                <a href="#monitoramento">Monitoramento</a>
+                <a href="#seguranca">Segurança</a>
+                <a href="#assessoria">Assessoria</a>
+                <a href="#localizacao">Sede</a>
+                <div style="display: flex; gap: 12px; margin-left: 12px; align-items: center; border-left: 1px solid rgba(0,0,0,0.1); padding-left: 16px;">
+                    <a href="https://www.instagram.com/transmon_seg/" target="_blank" style="color: var(--text-dark); opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61578273306088" target="_blank" style="color: var(--text-dark); opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+                </div>
+                <a href="#contato" class="btn" style="padding: 10px 24px; font-size: 0.95rem; margin-left: 16px;">Contato</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1 style="max-width: 900px; margin: 0 auto 24px auto; line-height: 1.2; font-size: clamp(2rem, 3.5vw, 3rem);">
+                Cansado de Ser Avisado Sobre Desvios e Atrasos da Frota Quando o Prejuízo Já Aconteceu?
+            </h1>
+            <p style="font-size: 1.25rem; color: #E5E7EB; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                Chega de reatividade. Proteja sua operação com a assessoria de segurança que garante 100% de confiança operacional, mapeando manchas criminais e fiscalizando a sua logística em tempo real.
+            </p>
+            <a href="#contato" class="btn" style="padding: 18px 40px; font-size: 1.125rem;">Agendar Diagnóstico Imediato</a>
+        </div>
+    </section>
+
+    <!-- O DESAFIO LOGÍSTICO -->
+    <section class="section-padding bg-warm">
+        <div class="container">
+            <div class="section-header">
+                <h2>Os Passivos da Terceirização Sem Auditoria</h2>
+                <p>Terceirizar o transporte não elimina a responsabilidade sobre a entrega. A dependência exclusiva dos dados da transportadora gera riscos operacionais graves.</p>
+            </div>
+            <div class="pain-grid">
+                <div class="card">
+                    <h3>Invisibilidade Operacional</h3>
+                    <p>Ao transferir a operação, a sua empresa perde a rastreabilidade primária. A dependência de atualizações manuais e repasses da transportadora inviabiliza ações preventivas diante de desvios de rota ou paradas indevidas.</p>
+                </div>
+                <div class="card">
+                    <h3>Ociosidade e Gargalos nas Docas</h3>
+                    <p>A falta de precisão sobre o horário estimado de chegada (ETA) desorganiza todo o cronograma de recebimento, gerando equipes de pátio ociosas, filas logísticas e o travamento da sua esteira de distribuição.</p>
+                </div>
+                <div class="card">
+                    <h3>Impossibilidade de Auditoria (Glosas)</h3>
+                    <p>Sem acesso independente à telemetria do veículo, a diretoria logística perde a base probatória para aplicar multas ou glosas por quebra de SLA, sendo forçada a absorver integralmente o prejuízo financeiro do atraso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MÓDULO 1: MONITORAMENTO (2-Card Grid) ==================== -->
+    <section id="monitoramento" class="section-padding">
+        <div class="container">
+            <div class="section-header" style="text-align: left; max-width: 100%;">
+                <span class="module-tag">Monitoramento Estratégico</span>
+                <h2>Sua Frota Sob Vigilância Absoluta</h2>
+                <p style="margin: 0; max-width: 800px;">Não somos um "aparelhinho de GPS". Nós somos o seu Centro de Comando Ativo. Consolidamos os dados para que você assuma o controle preditivo das suas docas e nunca mais seja pego de surpresa.</p>
+            </div>
+            
+            <div class="two-card-grid">
+                <div class="large-feat-card">
+                    <img src="../Transmomseg_ Monitoramento e Segurança de Veículos _ TransMomSeg_files/gestao-de-frotas-mnlq8V5rrnTP0zWN.png" alt="Rastreamento Contínuo">
+                    <div class="large-feat-card-content">
+                        <h3>Rastreamento Ponto a Ponto</h3>
+                        <p>Acompanhamento exato e sem latência. O sistema processa os dados automaticamente, eliminando as ligações telefônicas intermináveis para saber onde o parceiro está. Ao menor desvio de rota, nossa central age.</p>
+                    </div>
+                </div>
+                <div class="large-feat-card">
+                    <img src="../Transmomseg_ Monitoramento e Segurança de Veículos _ TransMomSeg_files/card-rota-otimizada-YBge9zvE03ulxVJV.png" alt="Roteirização Otimizada">
+                    <div class="large-feat-card-content">
+                        <h3>Roteirização e ETA</h3>
+                        <p>Inteligência de trajeto que corta custos operacionais e emite previsões de chegada (ETA) exatas, substituindo o achismo e as planilhas manuais pelo controle absoluto na gestão da frota.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MÓDULO 2: SEGURANÇA (2-Card Grid Clean) ==================== -->
+    <section id="seguranca" class="section-padding bg-gray">
+        <div class="container">
+            <div class="section-header" style="text-align: left; max-width: 100%;">
+                <span class="module-tag">Segurança Integrada</span>
+                <h2>O Cinturão de Proteção Logística</h2>
+                <p style="margin: 0; max-width: 800px;">Inteligência geográfica e controle rigoroso de acesso que impedem o roubo e a avaria antes que o sinistro sequer aconteça.</p>
+            </div>
+
+            <div class="two-card-grid">
+                <div class="large-feat-card">
+                    <img src="../Transmomseg_ Monitoramento e Segurança de Veículos _ TransMomSeg_files/map-with-the-main-inbound-and-outbound-highways-in-the-city-of-rio-de-janeiro-source-own-A1aBx0g168ToPWVO.png" alt="Mapeamento de Áreas de Risco">
+                    <div class="large-feat-card-content">
+                        <h3>Análise de Mancha Criminal</h3>
+                        <p>Monitoramos áreas de risco em tempo real para desviar proativamente sua carga de zonas hostis. Emitimos alertas diretos ao motorista para evitar ocorrências milionárias na rota.</p>
+                    </div>
+                </div>
+                
+                <div class="large-feat-card">
+                    <img src="../Transmomseg_ Monitoramento e Segurança de Veículos _ TransMomSeg_files/controle-de-entrada-e-saida-de-veiculos-900x600-AR0MNKVRpyiNl3q3.webp" alt="Fiscalização Logística">
+                    <div class="large-feat-card-content">
+                        <h3>Fiscalização de Docas</h3>
+                        <p>Asseguramos o cumprimento rigoroso dos seus procedimentos internos. Estabelecemos um controle inviolável de acesso (In/Out) para neutralizar furtos na raiz do pátio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MÓDULO 3: ASSESSORIA (Cinematic Dark Mode Fix) ==================== -->
+    <section id="assessoria" class="section-padding bg-dark">
+        <div class="container cinematic-wrapper">
+            <div style="margin-bottom: 40px;">
+                <span class="module-tag" style="background: white; color: var(--text-dark);">Assessoria Tática</span>
+                <h2>O Escudo de Defesa da Sua Diretoria</h2>
+                <p style="color: var(--text-light); font-size: 1.125rem; max-width: 700px; margin: 16px auto;">Monitorar e cruzar os braços não recupera carga. É preciso intervir com velocidade letal, documentação irrefutável e força tática no asfalto.</p>
+            </div>
+
+            <img src="pasted-image-0-1-YNqPg04y44c9nDBW.avif" alt="Equipe Tática e Pronta Resposta" class="cinematic-main-img">
+
+            <div class="cinematic-grid">
+                <div class="cinematic-card">
+                    <h3>Pronta Resposta e Intervenção</h3>
+                    <p>Ao detectarmos anomalias severas nas rodovias, atuamos in loco. Graças ao nosso contato direto com a Segurança Pública, proporcionamos apoio rápido na recuperação da sua mercadoria.</p>
+                </div>
+                <div class="cinematic-card">
+                    <h3>Geração de Glosas e Seguros</h3>
+                    <p>Nossa inteligência emite dossiês frios com provas materiais contra transportadoras terceiras infratoras. Você adquire base jurídica para multá-las e blinda as exigências da sua apólice de seguro.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TABELA COMPARATIVA ==================== -->
+    <section class="section-padding bg-gray">
+        <div class="container">
+            <div class="section-header">
+                <h2>A Diferença na Prática</h2>
+                <p>Veja o impacto direto de ter a Transmonseg blindando a sua operação.</p>
+            </div>
+            <div class="comparison-grid">
+                <div class="comp-card negative">
+                    <div class="comp-header">SEM TRANSMONSEG</div>
+                    <ul>
+                        <li><strong>Reatividade:</strong> Descobre o roubo apenas quando a transportadora avisa (geralmente horas depois do ocorrido).</li>
+                        <li><strong>Ponto Cego:</strong> Refém da sorte nas estradas e das "manobras" do motorista terceirizado.</li>
+                        <li><strong>Prejuízo Oculto:</strong> Sem provas dos atrasos, sua empresa absorve a perda financeira e não glosa o contrato.</li>
+                        <li><strong>Caos nas Docas:</strong> O efeito dominó gera filas imensas de veículos e paralisa o seu faturamento diário.</li>
+                    </ul>
+                </div>
+                <div class="comp-card positive">
+                    <div class="comp-header">COM TRANSMONSEG</div>
+                    <ul>
+                        <li><strong>Pró-Atividade Total:</strong> Ação imediata e intervenção ao menor desvio de rota detectado.</li>
+                        <li><strong>Visibilidade Absoluta:</strong> Rastreamento pontual com previsão exata de chegada (ETA).</li>
+                        <li><strong>Auditoria Ativa:</strong> Relatórios inquestionáveis na sua mão para aplicar multas nas transportadoras infratoras.</li>
+                        <li><strong>Paz de Espírito:</strong> O Diretor de Logística foca em escalar negócios em vez de apagar incêndios.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SOBRE NÓS ==================== -->
+    <section class="section-padding">
+        <div class="container about-split">
+            <div class="about-content">
+                <h2 style="font-size: 2.5rem; margin-bottom: 24px; color: var(--text-dark);">Sobre a Transmonseg</h2>
+                <p>Nascemos para resolver o gargalo mais caro da logística brasileira: <strong>o ponto cego da terceirização</strong>. Percebemos que as grandes indústrias perdiam milhões não apenas por roubos nas estradas, mas pela falta de visibilidade, atrasos não notificados e quebras de SLA impossíveis de serem provadas.</p>
+                <p>Nós não vendemos "rastreamento básico". Entregamos um <strong>Centro de Comando Ativo</strong>. Somos os olhos táticos da sua diretoria, garantindo que as regras de ouro da sua operação sejam cumpridas com rigor de ponta a ponta.</p>
+                <p>Tornamo-nos o escudo definitivo para empresas que cansaram de perder faturamento para falhas e omissões de parceiros logísticos.</p>
+            </div>
+            <div class="data-grid" style="grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="data-card" style="padding: 32px;">
+                    <h3 style="font-size: 3.5rem;">100+</h3>
+                    <p style="font-size: 1.125rem; font-weight: 700;">Confiança Total</p>
+                </div>
+                <div class="data-card" style="padding: 32px;">
+                    <h3 style="font-size: 3.5rem;">15</h3>
+                    <p style="font-size: 1.125rem; font-weight: 700;">Clientes Satisfeitos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== LOCALIZAÇÃO (GOOGLE MAPS) ==================== -->
+    <section id="localizacao" class="section-padding bg-gray">
+        <div class="container">
+            <div class="section-header">
+                <h2>Onde Estamos Localizados</h2>
+                <p>Infraestrutura blindada no Rio de Janeiro, com abrangência de monitoramento em todo o território nacional.</p>
+            </div>
+            
+            <div class="loc-grid">
+                <div>
+                    <h3 style="font-size: 2rem; margin-bottom: 16px;">Sede de Comando</h3>
+                    <p style="font-size: 1.125rem; color: var(--text-muted); margin-bottom: 24px;">
+                        A Transmonseg (Transmonseg Pro Ltda) é uma empresa com base operacional no Rio de Janeiro, focada no monitoramento de sistemas de segurança eletrônica.
+                    </p>
+                    <p style="font-size: 1.125rem; color: var(--text-muted); margin-bottom: 32px;">
+                        Atuando na região de Nova Iguaçu e adjacências, possuímos estrutura de alta resiliência tecnológica proporcionando resposta tática em qualquer rodovia do país.
+                    </p>
+                    <a href="#contato" class="btn btn-outline">Fale com um Especialista</a>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://maps.google.com/maps?q=Rua%20das%20Pereiras,%2038,%20Jardim%20Palmares,%20Nova%20Igua%C3%A7u%20-%20RJ&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTATO / CTA ==================== -->
+    <section id="contato" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Agende seu Diagnóstico Logístico</h2>
+                <p>Entre em contato e descubra como nosso Centro de Comando pode escalar sua eficiência.</p>
+            </div>
+            
+            <div class="contact-split">
+                <div class="contact-info">
+                    <img src="logo-transparent.png" alt="Logo Transmonseg" style="max-width: 220px; margin-bottom: 32px; display: block;">
+                    <h3 style="margin-bottom: 24px; font-size: 1.5rem;">Fale Diretamente Conosco</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 32px;">Nossa equipe de assessoria externa está pronta para assumir a auditoria da sua frota terceirizada e blindar as suas entregas contra prejuízos ocultos.</p>
+                    
+                    <ul style="list-style: none; font-size: 1.125rem; color: var(--text-dark);">
+                        <li style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-yellow-dark)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            <strong>+55 (21) 99983-5097</strong>
+                        </li>
+                        <li style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-yellow-dark)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <strong>gerenciamento@transmonseg.com.br</strong>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 12px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-yellow-dark)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <strong>Nova Iguaçu, RJ</strong>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="form-container">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="name">Seu nome completo</label>
+                            <input type="text" id="name" class="form-control" placeholder="Ex: João Silva" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Seu e-mail*</label>
+                            <input type="email" id="email" class="form-control" placeholder="Ex: joao@empresa.com.br" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Sua mensagem*</label>
+                            <textarea id="message" class="form-control" placeholder="Descreva sua necessidade logística..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Enviar solicitação</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <footer style="background: var(--text-dark); color: white; padding: 40px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+            <p style="margin: 0; color: rgba(255,255,255,0.7);">&copy; 2026 Transmonseg Pro Ltda. Todos os direitos reservados. Nova Iguaçu - RJ.</p>
+            <div style="display: flex; gap: 16px;">
+                <a href="https://www.instagram.com/transmon_seg/" target="_blank" style="color: white; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://www.facebook.com/profile.php?id=61578273306088" target="_blank" style="color: white; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                        
+                        // Remove delays after entry animation so hover physics become instant
+                        setTimeout(() => {
+                            entry.target.classList.remove('delay-1', 'delay-2', 'delay-3');
+                            entry.target.style.transition = 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+                        }, 1200);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+            document.querySelectorAll('.section-header, .card, .feature-card, .data-card, .contact-card, .comp-card, .loc-grid > div, .large-feat-card, .cinematic-card, .cinematic-main-img').forEach((el, index) => {
+                if(el.classList.contains('card') || el.classList.contains('feature-card') || el.classList.contains('data-card') || el.classList.contains('large-feat-card') || el.classList.contains('cinematic-card')) {
+                    el.classList.add('delay-' + ((index % 3) + 1));
+                }
+                observer.observe(el);
+            });
+
+            setTimeout(() => {
+                document.querySelectorAll('.hero h1, .hero p, .hero .btn').forEach((el, i) => {
+                    el.classList.add('delay-' + (i + 1), 'active');
+                    
+                    setTimeout(() => {
+                        el.classList.remove('delay-' + (i + 1));
+                        el.style.transition = 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+                    }, 1200);
+                });
+            }, 100);
+        });
+
+        // Navbar shrink logic (floating island)
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const logo = document.querySelector('.logo img');
+            if(window.scrollY > 50) {
+                nav.style.padding = '8px 0';
+                nav.style.top = '10px';
+                logo.style.height = '80px';
+            } else {
+                nav.style.padding = '12px 0';
+                nav.style.top = '16px';
+                logo.style.height = '115px';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transmonseg | Centro de Comando Ativo para Logística</title>
+    <meta name="description" content="Assessoria e monitoramento ativo para erradicar o ponto cego da terceirização logística. Proteja seu SLA e garanta eficiência nas docas.">
+    <style>
+        /* Neo-Brutalist Variables */
+        :root {
+            --brand-color: #FF6600;
+            --bg-color: #FAFAFA;
+            --text-main: #000000;
+            --border-dark: #000000;
+            --shadow-brutalist: 4px 4px 0px var(--border-dark);
+            --shadow-hover: 6px 6px 0px var(--border-dark);
+            --transition-speed: 0.2s;
+        }
+
+        /* Reset & Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Inter:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--brand-color);
+            color: #000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 16px 32px;
+            font-size: 1.125rem;
+            border: 3px solid var(--border-dark);
+            box-shadow: var(--shadow-brutalist);
+            transition: all var(--transition-speed) ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px var(--border-dark);
+        }
+
+        /* Navigation */
+        nav {
+            padding: 24px 0;
+            border-bottom: 3px solid var(--border-dark);
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--brand-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            border-bottom: 3px solid var(--border-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 2px 2px, #000 1px, transparent 0);
+            background-size: 32px 32px;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .tag {
+            display: inline-block;
+            background: #000;
+            color: var(--brand-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.875rem;
+            padding: 6px 12px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .social-proof {
+            margin-top: 32px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .social-proof .stars {
+            color: var(--brand-color);
+            font-size: 1.25rem;
+        }
+
+        /* Pain Section (Hemorragia) */
+        .pain-section {
+            padding: 100px 0;
+            background: #fff;
+            border-bottom: 3px solid var(--border-dark);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 16px;
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .card {
+            background: #fff;
+            border: 3px solid var(--border-dark);
+            padding: 32px;
+            box-shadow: var(--shadow-brutalist);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            display: inline-block;
+            background: var(--brand-color);
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        /* Solution Section (Mecanismo) */
+        .solution-section {
+            padding: 100px 0;
+            background: var(--brand-color);
+            color: #000;
+            border-bottom: 3px solid var(--border-dark);
+        }
+
+        .solution-section .section-header h2 {
+            color: #000;
+            background: #fff;
+            display: inline-block;
+            padding: 8px 24px;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .solution-item {
+            background: #fff;
+            border: 3px solid #000;
+            padding: 32px;
+            box-shadow: var(--shadow-brutalist);
+            margin-bottom: 24px;
+        }
+        
+        .solution-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .solution-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .solution-item h3::before {
+            content: '✓';
+            background: #000;
+            color: var(--brand-color);
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border-radius: 50%;
+        }
+
+        .solution-image {
+            background: #000;
+            height: 100%;
+            min-height: 400px;
+            border: 3px solid #000;
+            box-shadow: var(--shadow-brutalist);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2rem;
+            text-align: center;
+            padding: 32px;
+            overflow: hidden;
+        }
+
+        .solution-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,102,0,0.1) 10px, rgba(255,102,0,0.1) 20px);
+        }
+
+        /* Transformation Section */
+        .transformation {
+            padding: 100px 0;
+            background: #fff;
+        }
+
+        .transform-box {
+            border: 3px solid var(--border-dark);
+            box-shadow: var(--shadow-brutalist);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .transform-before, .transform-after {
+            padding: 48px;
+        }
+
+        .transform-before {
+            background: #f9f9f9;
+            border-right: 3px solid var(--border-dark);
+        }
+
+        .transform-after {
+            background: #e6ffed;
+        }
+
+        .transform-label {
+            display: inline-block;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            padding: 4px 12px;
+            margin-bottom: 24px;
+            border: 2px solid #000;
+        }
+
+        .transform-before .transform-label {
+            background: #ffcccc;
+            color: #d00000;
+        }
+
+        .transform-after .transform-label {
+            background: #000;
+            color: #00ff66;
+        }
+
+        .transform-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        /* Footer CTA */
+        .footer-cta {
+            padding: 100px 0;
+            background: #000;
+            color: #fff;
+            text-align: center;
+            border-top: 6px solid var(--brand-color);
+        }
+
+        .footer-cta h2 {
+            color: #fff;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 24px;
+        }
+
+        .footer-cta p {
+            font-size: 1.25rem;
+            color: #aaa;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-cta .btn {
+            background: #fff;
+            color: #000;
+            border-color: var(--brand-color);
+            box-shadow: 4px 4px 0px var(--brand-color);
+        }
+        
+        .footer-cta .btn:hover {
+            box-shadow: 6px 6px 0px var(--brand-color);
+        }
+
+        .footer-bottom {
+            padding: 24px 0;
+            text-align: center;
+            background: #000;
+            color: #555;
+            font-size: 0.875rem;
+            border-top: 1px solid #333;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+            .transform-box {
+                grid-template-columns: 1fr;
+            }
+            .transform-before {
+                border-right: none;
+                border-bottom: 3px solid var(--border-dark);
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <div class="logo">TRANS<span>MONSEG</span></div>
+            <a href="#diagnostico" class="btn" style="padding: 10px 24px; font-size: 1rem;">Blindar Operação</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="tag">Centro de Comando Ativo B2B</div>
+                <h1>Erradique o Ponto Cego da Terceirização Logística</h1>
+                <p>Substitua a reatividade por um Centro de Comando Ativo que fiscaliza, protege o seu SLA e garante o faturamento nas docas.</p>
+                <a href="#diagnostico" class="btn">Agendar Diagnóstico de Operação</a>
+                <div class="social-proof">
+                    <span class="stars">★★★★★</span>
+                    <span>Auditando as maiores operações logísticas do Brasil.</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="pain-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>O Inferno Operacional</h2>
+                <p>A terceirização reduz custos, mas cria gargalos mortais se você perder a visibilidade.</p>
+            </div>
+            <div class="pain-grid">
+                <div class="card">
+                    <div class="card-icon">👁️</div>
+                    <h3>O Ponto Cego</h3>
+                    <p>Ao contratar terceiros, você perde a visibilidade sobre a carga milionária. Eles odeiam a cegueira na estrada, e você fica refém da sorte.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧱</div>
+                    <h3>O Efeito Dominó nas Docas</h3>
+                    <p>Um caminhão que some do radar trava a doca inteira. Equipe parada, processos congelados e atrasos catastróficos na linha de distribuição.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔥</div>
+                    <h3>Queima de SLA</h3>
+                    <p>Se a carga não chega, a pressão da diretoria cai no colo do Diretor de Logística. É exaustivo depender da transportadora para reportar sinistros tarde demais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>O Antídoto: Inteligência Tática</h2>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-content">
+                    <div class="solution-item">
+                        <h3>Centro de Comando Ativo</h3>
+                        <p>Não vendemos "rastreador". Vendemos monitoramento contínuo que anula a reatividade. Ação imediata assim que a carga sai do trilho.</p>
+                    </div>
+                    <div class="solution-item">
+                        <h3>Fiscalização e Glosas</h3>
+                        <p>Assessoria in loco para auditoria de SLAs. Se a transportadora quebra as regras, geramos relatórios irrefutáveis para aplicação de glosas nos contratos.</p>
+                    </div>
+                    <div class="solution-item">
+                        <h3>Blindagem Criminal</h3>
+                        <p>Mapeamento estratégico de rodovias. Roteirização ativa que evita zonas hostis, protegendo a vida do motorista e o faturamento da sua empresa.</p>
+                    </div>
+                </div>
+                <div class="solution-image">
+                    VISIBILIDADE<br>ABSOLUTA EM<br>TEMPO REAL
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="transformation">
+        <div class="container">
+            <div class="section-header">
+                <h2>A Terra Prometida</h2>
+            </div>
+            <div class="transform-box">
+                <div class="transform-before">
+                    <span class="transform-label">ANTES</span>
+                    <div class="transform-content">
+                        <h3>Reatividade e Ansiedade</h3>
+                        <p>O diretor de logística vive apagando incêndios causados pela incompetência de transportadoras terceirizadas. Vive tenso, perdendo noites de sono por falta de informações precisas da estrada.</p>
+                    </div>
+                </div>
+                <div class="transform-after">
+                    <span class="transform-label">DEPOIS</span>
+                    <div class="transform-content">
+                        <h3>Previsibilidade Total</h3>
+                        <p>Um mestre de logística que dorme tranquilo. Sabe que a Transmonseg está auditando cada quilômetro. O foco volta a ser escalar a operação, não fazer babysitting de caminhoneiro.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="diagnostico" class="footer-cta">
+        <div class="container">
+            <h2>Assuma o Controle Hoje</h2>
+            <p>O teto de crescimento da sua central é ditado pela sua capacidade de monitorar os terceiros. Erradique as falhas.</p>
+            <a href="#diagnostico" class="btn">Solicitar Mapeamento Estratégico</a>
+        </div>
+    </section>
+
+    <div class="footer-bottom">
+        <div class="container">
+            &copy; 2026 Transmonseg. Todos os direitos reservados.
+        </div>
+    </div>
+
+</body>
+</html>
