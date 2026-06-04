@@ -489,7 +489,7 @@
                 </div>
                 
                 <div class="form-container">
-                    <form action="https://api.web3forms.com/submit" method="POST">
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
                         <input type="hidden" name="access_key" value="bd68c1d0-ffb3-4574-9d31-9d03de75e26e">
                         
                         <div class="form-group">
@@ -572,6 +572,55 @@
                 logo.style.height = '115px';
             }
         });
+
+        // Form Submit without leaving the page (White-label Premium)
+        const form = document.getElementById('contactForm');
+        if(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btn = form.querySelector('button');
+                const originalText = btn.innerText;
+                const originalBg = window.getComputedStyle(btn).backgroundColor;
+                const originalColor = window.getComputedStyle(btn).color;
+                
+                btn.innerText = 'Enviando...';
+                
+                const formData = new FormData(form);
+                const object = Object.fromEntries(formData);
+                const json = JSON.stringify(object);
+
+                fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: json
+                })
+                .then(async (response) => {
+                    let jsonRes = await response.json();
+                    if (response.status == 200) {
+                        btn.innerText = 'Solicitação Enviada! ✓';
+                        btn.style.background = '#10B981'; // Verde sucesso
+                        btn.style.color = 'white';
+                        form.reset();
+                        setTimeout(() => {
+                            btn.innerText = originalText;
+                            btn.style.background = originalBg;
+                            btn.style.color = originalColor;
+                        }, 5000);
+                    } else {
+                        btn.innerText = 'Erro. Tente novamente.';
+                        setTimeout(() => { btn.innerText = originalText; }, 3000);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                    btn.innerText = 'Erro ao enviar.';
+                    setTimeout(() => { btn.innerText = originalText; }, 3000);
+                });
+            });
+        }
     </script>
 </body>
 </html>
